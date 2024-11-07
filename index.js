@@ -13,12 +13,12 @@ const Immersive = Platform.OS === 'android' ? {
   setImmersive: (isOn) => RNImmersive.setImmersive(isOn),
   getImmersive: () => RNImmersive.getImmersive(), // do not always match actual display state
   addImmersiveListener: (listener) => {
-    DeviceEventEmitter.addListener('@@IMMERSIVE_STATE_CHANGED', listener)
+    this.listener = DeviceEventEmitter.addListener('@@IMMERSIVE_STATE_CHANGED', listener)
     if (isListenerEnabled) return
     isListenerEnabled = true
     RNImmersive.addImmersiveListener()
   },
-  removeImmersiveListener: (listener) => DeviceEventEmitter.removeListener('@@IMMERSIVE_STATE_CHANGED', listener)
+  removeImmersiveListener: (listener) => this.listener.remove()
 } : {
   on: unSupportedError,
   off: unSupportedError,
